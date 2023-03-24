@@ -18,10 +18,11 @@ writer = Turtle(visible=False)
 aim = vector(5, 0)
 pacman = vector(-40, -80)
 ghosts = [
-    [vector(-180, 160), vector(5, 0)],
-    [vector(-180, -160), vector(0, 5)],
-    [vector(100, 160), vector(0, -5)],
-    [vector(100, -160), vector(-5, 0)],
+    [vector(-180, 160), vector(20, 0)],
+    [vector(-180, -160), vector(0, 20)],
+    [vector(100, 160), vector(0, -20)],
+    [vector(100, -160), vector(-20, 0)],
+    #Se modifica el segundo vector para cambiar la velocidad
 ]
 # fmt: off
 tiles = [
@@ -36,7 +37,7 @@ tiles = [
     0, 1, 1, 1, 1, 1, 1, 0, 0, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1,
     0, 1, 0, 0, 1, 0, 1, 0, 0, 0, 1, 0, 1, 0, 0, 1, 0, 0, 0, 1,
     0, 1, 0, 0, 1, 0, 1, 0, 0, 0, 1, 0, 1, 0, 0, 1, 0, 0, 0, 1,
-    0, 1, 1, 1, 1, 1, 1, 1, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1,#Aquí
+    0, 1, 1, 1, 1, 1, 1, 1, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1,
     0, 1, 0, 0, 1, 0, 0, 1, 0, 1, 0, 0, 0, 0, 0, 1, 0, 1, 0, 0,
     0, 1, 1, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 1, 1, 0, 1, 1, 1,
     0, 0, 1, 0, 1, 0, 1, 0, 0, 0, 1, 0, 1, 0, 1, 0, 0, 1, 0, 1,
@@ -134,10 +135,88 @@ def move():
         if valid(point + course):
             point.move(course)
         else:
-            options = [
-                vector(5, 0),
-                vector(-5, 0),
-                vector(0, 5),
+            if pacman.y<=point.y:
+            #hay que bajar
+                if pacman.x<=point.x:
+                #hay que ir a la izquierda
+                    options = [
+                        vector(-5, 0),
+                        vector(0, -5)
+                    ]
+                    plan = choice(options)
+                    if valid(point + plan):
+                        course.x = plan.x
+                        course.y = plan.y
+                    else:
+                        options = [
+                            vector(5, 0),
+                            vector(0, 5)
+                        ]
+                    plan = choice(options)
+                    course.x = plan.x
+                    course.y = plan.y
+
+                else:
+                    #hay que ir a la derecha
+                        options=[
+                        vector(5, 0),
+                        vector(0, -5)
+                        ]
+                        plan = choice(options)
+                        if valid(point + plan):
+                            course.x = plan.x
+                            course.y = plan.y
+                        else:
+                            options=[
+                            vector(-5, 0),
+                            vector(0, 5)
+                            ]
+                            plan = choice(options)
+                            course.x = plan.x
+                            course.y = plan.y
+            else:
+                #hay que ir hacia arriba
+                if pacman.x<=point.x:
+                    #a la izquierda
+                    options = [
+                        vector(-5, 0),
+                        vector(0, 5)
+                    ]
+                    plan = choice(options)
+                    if valid(point + plan):
+                        course.x = plan.x
+                        course.y = plan.y
+                    else:
+                         #a la izquierda
+                        options = [
+                            vector(5, 0),
+                            vector(0, 5)
+                        ] 
+                        plan = choice(options)
+                        course.x = plan.x
+                        course.y = plan.y
+                else:
+                    #a la derecha
+                    options=[
+                    vector(5, 0),
+                    vector(0, 5)
+                    ]
+                    plan = choice(options)
+                    if valid(point + plan):
+                        course.x = plan.x
+                        course.y = plan.y
+                    else:
+                        print("MAL")
+                        options=[
+                        vector(-5, 0),
+                        vector(0, 5),
+                        ]
+                        if valid(point + plan):
+                            course.x = plan.x
+                            course.y = plan.y
+                        else:                        
+                            options=[
+                            vector(-5, 0),
                 vector(0, -5),
             ]
             plan = choice(options)
@@ -154,7 +233,7 @@ def move():
         if abs(pacman - point) < 20:
             return
 
-    ontimer(move, 10)
+    ontimer(move, 50)
     #Aquí cambié la velocidad de los fantasmas y del pacman
 
 
